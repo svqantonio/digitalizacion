@@ -1,0 +1,28 @@
+<button class="btn btn-light" routerLink="/contenedores">← Volver a la lista de unidades documentales</button>
+<div class="container" id="tabla">
+    <table class="table table-success table-hover" border="1">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="col">Observaciones</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Número de expediente</th>
+                <th scope="col">Serie documental</th>
+                <th scope="col">Unidad documental</th>
+                <th scope="col">Ruta</th>
+                <th scope="col" *ngIf="condicionUser == 'Administrador'">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let doc of lista_documentosDevueltos_contenedorSeleccionado">
+                <th>{{ doc.TITULO}}</th>
+                <th>{{ doc.FECHA | date: 'dd/MM/yyyy' }}</th>
+                <th>{{ doc.NUM_EXPEDIENTE }}</th>
+                <th>{{ doc.SERIE_DOCUMENTAL }}</th>
+                <th>{{ doc.CONTENEDOR }}: {{doc.NUMERO}}</th>
+                <th *ngIf="doc.RUTA != null"><a href="{{doc.RUTA}}" target="_blank">Ver Doc</a></th>
+                <th *ngIf="doc.RUTA == null">Sin doc</th>
+                <th *ngIf="condicionUser == 'Administrador'"><button class="btn btn-outline-danger" (click)="borrarDoc(doc)">Borrar</button></th>
+            </tr>
+        </tbody>
+    </table>
+</div>

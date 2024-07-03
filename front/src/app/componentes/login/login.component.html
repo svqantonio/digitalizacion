@@ -1,0 +1,20 @@
+<div class="centrar">
+    <div class="alert alert-primary" role="alert">
+        Formulario de LOGIN
+    </div>
+    <form  class="form-horizontal" #loginForm="ngForm" (ngSubmit)="submitLogin(loginForm.value)">
+        <div class="mb-3">
+            <input type="text" class="form-control" required [(ngModel)]="usuario.user" name="user" #user="ngModel" id="user" placeholder="Usuario *">
+            <div [hidden]= "user.valid || user.pristine" class="alert alert-danger" id="hidden">
+                El usuario es obligatorio
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" required [(ngModel)]="usuario.password" name="password" #password="ngModel" id="password" placeholder="Password *">
+            <div [hidden]="password.valid || password.pristine" class="alert alert-danger" id="hidden">
+                La contraseña es obligatoria
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Iniciar sesión</button>
+    </form>
+</div>

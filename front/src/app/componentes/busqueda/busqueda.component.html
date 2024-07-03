@@ -1,0 +1,62 @@
+<button class="btn btn-light" id="volver" (click)="volver()">← Volver a la lista de búsqueda</button>
+<div class="container" [hidden]="!tablaBusqueda">
+    <div class="alert alert-info" role="alert">El campo que hayas buscado es el que está <strong>resaltado</strong> en la tabla</div>
+    <table class="table table-success table-hover" border="1">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="col" *ngIf="condicionUser == 'Administrador'">ID</th>
+                <th scope="col">Observaciones</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Número de expediente</th>
+                <th scope="col">Serie documental</th>
+                <th scope="col">Unidad documental</th>
+                <th scope="col">Ruta</th>
+                <th scope="col" *ngIf="condicionUser != 'Normal'">Editar</th>
+                <th scope="col" *ngIf="condicionUser == 'Administrador'">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let doc of listaDocumentos">
+                <th *ngIf="condicionUser == 'Administrador'">{{doc.ID_DOCUMENTO}}</th>
+                <th style="text-transform: capitalize;" *ngIf="tipoBusqueda != 1 && parametroBusqueda == undefined">Sin observaciones</th>
+                <th style="text-transform: capitalize;" *ngIf="tipoBusqueda != 1 && parametroBusqueda != undefined">{{doc.TITULO}}</th>
+                <th style="text-transform: capitalize;" class="table-active" *ngIf="tipoBusqueda == 1 && parametroBusqueda == undefined">Sin observaciones</th>
+                <th style="text-transform: capitalize;" class="table-active" *ngIf="tipoBusqueda == 1 && parametroBusqueda != undefined">{{doc.TITULO}}</th>
+                <th *ngIf="tipoBusqueda != 2">{{ doc.FECHA | date: 'dd/MM/yyyy' }}</th>
+                <th class="table-active" *ngIf="tipoBusqueda == 2">{{ doc.FECHA | date: 'dd/MM/yyyy' }}</th>
+                <th *ngIf="tipoBusqueda != 3">{{ doc.NUM_EXPEDIENTE }}</th>
+                <th class="table-active" *ngIf="tipoBusqueda == 3 && parametroBusqueda != undefined">{{ doc.NUM_EXPEDIENTE }}</th>
+                <th class="table-active" *ngIf="tipoBusqueda == 3 && parametroBusqueda == undefined">Sin Número de Expediente</th>
+                <th *ngIf="tipoBusqueda != 4">{{ doc.SERIE_DOCUMENTAL }}</th>
+                <th class="table-active" *ngIf="tipoBusqueda == 4">{{ doc.SERIE_DOCUMENTAL }}</th>
+                <th *ngIf="tipoBusqueda != 5">{{ doc.CONTENEDOR }}: {{doc.NUMERO}}</th>
+                <th class="table-active" *ngIf="tipoBusqueda == 5">{{ doc.CONTENEDOR }}: {{doc.NUMERO}}</th>
+                <th *ngIf="doc.RUTA != null"><a href="{{doc.RUTA}}" target="_blank">Ver Doc</a></th>
+                <th *ngIf="doc.RUTA == null">Sin doc</th>
+                <th><button class="btn btn-link" routerLink="/documento/{{doc.ID_DOCUMENTO}}" *ngIf="condicionUser != 'Normal'">Editar Doc</button></th>
+                <th *ngIf="condicionUser == 'Administrador'"><button class="btn btn-outline-danger" (click)="borrarDoc(doc)">Borrar Doc</button></th>
+            </tr>   
+        </tbody>
+    </table>
+    <div [hidden]="!paginacion" class="paginacion">
+        <button class="btn btn-outline-primary" (click)="primeraPagina()" [disabled]="isDisabledPrimeraPagina"><<</button>
+        <button class="btn btn-outline-primary" (click)="controlAnt()" [disabled]="isDisabledAnt"><</button>
+
+        <button class="btn btn-outline-primary" (click)="controlesTresPrimerosBotones(0)" *ngIf="primeroNoSeleccionado == true">1</button>
+        <button class="btn btn-primary" *ngIf="primeroNoSeleccionado == false">1</button>
+
+        <button class="btn btn-outline-primary" (click)="controlesTresPrimerosBotones(1)" *ngIf="segundoNoSeleccionado == true" [disabled]="segundoDisabled">2</button>
+        <button class="btn btn-primary" *ngIf="segundoNoSeleccionado == false" [disabled]="segundoDisabled">2</button>
+
+        <button class="btn btn-outline-primary" (click)="controlesTresPrimerosBotones(2)" *ngIf="terceroNoSeleccionado == true" [disabled]="terceroDisabled">3</button>
+        <button class="btn btn-primary" *ngIf="terceroNoSeleccionado == false" [disabled]="terceroDisabled">3</button>
+
+        <label *ngIf="auxiliarOculto == false"><u style="color: white;">.</u>-></label>
+        <button class="btn btn-primary" [(ngModel)]="pagina" *ngIf="auxiliarOculto == false">{{pagina + 1}}</button>
+
+        <button class="btn btn-outline-primary" (click)="controlSig()" [disabled]="isDisabledSig">></button>
+        <button class="btn btn-outline-primary" (click)="ultimaPagina()" [disabled]="isDisabledUltimaPagina">>></button>
+        <br>
+        <label>Mostrando página {{pagina + 1}}</label>
+    </div>
+</div>

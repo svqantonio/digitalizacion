@@ -1,0 +1,21 @@
+div {
+    margin-top: 2%;
+}
+input {
+    width: 50%;
+}
+
+.divGrande{
+    border: 5px solid black;
+    text-align: center;
+    height: 100px;
+}
+
+label, select {
+    margin-top: 5px;
+    text-align: center;
+}
+
+#volver{
+    margin-bottom: 5%
+}

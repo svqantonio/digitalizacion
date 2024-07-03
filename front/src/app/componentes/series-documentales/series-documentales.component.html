@@ -1,0 +1,79 @@
+<button class="btn btn-light" id="notThis" routerLink="/main">← Volver a la página principal</button>
+<div class="container">
+    <table class="table table-striped" border="1">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"><u>Sección nombre</u></th>
+                <th scope="col"><u>Sección número</u></th>
+                <th scope="col"><u>Subsección nombre</u></th>
+                <th scope="col"><u>Subsección número</u></th>
+                <th scope="col"><u>Serie documental nombre</u></th>
+                <th scope="col"><u>Serie documental número</u></th>
+                <th scope="col" *ngIf="condicionUser == 'Administrador'"><u>Borrar</u></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let series of lista_SeriesDocumentales">
+                <th><button class="btn btn-link" (click)="editarSeriesDocumentales(series)">{{series.SECCION_VARCHAR}}</button></th>
+                <th>{{series.SECCION_NUMERO}}</th>
+                <th>{{series.SUBSECCION_VARCHAR}}</th>
+                <th>{{series.SUBSECCION_NUMERO}}</th>
+                <th>{{series.SERIE_DOCUMENTAL_VARCHAR}}</th>
+                <th>{{series.SERIE_DOCUMENTAL_NUMERO}}</th>
+                <th *ngIf="condicionUser == 'Administrador'"><button class="btn btn-outline-danger" (click)="borrarSerieDocumental(series)">Borrar</button></th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container" >
+    <button class="btn btn-light" (click)="mostrarFormNuevaSerieDocumental()">Nueva serie documental</button>
+</div>
+<div class="container" *ngIf="((formNuevaSerieDocumental == true && formEditarSerieDocumental == false) || (formNuevaSerieDocumental == false && formEditarSerieDocumental == true))">
+    <h1>Formulario para {{ tipoFormulario | uppercase }} una serie documental</h1>
+    <form class="form-horizontal" #nuevaSerieDocumentalForm="ngForm" (ngSubmit)="submitSerieDocumentalForm(nuevaSerieDocumentalForm.value)">
+        <div class="form-group">
+            <label *ngIf="formEditarSerieDocumental == true">Nombre de la sección</label>
+            <input type="text" class="form-control" required [(ngModel)]="serieDocumental.SECCION_VARCHAR" #SECCION_VARCHAR="ngModel" name="SECCION_VARCHAR" id="SECCION_VARCHAR" placeholder="Sección nombre *">
+            <div [hidden]="SECCION_VARCHAR.valid || SECCION_VARCHAR.pristine" class="alert alert-danger">
+                El nombre de la sección es obligatoria
+            </div>
+        </div>
+        <div class="form-group">
+            <label *ngIf="formEditarSerieDocumental == true">Número de la sección</label>
+            <input type="number" class="form-control" required [(ngModel)]="serieDocumental.SECCION_NUMERO" #SECCION_NUMERO="ngModel" name="SECCION_NUMERO" id="SECCION_NUMERO" placeholder="Sección número *">
+            <div [hidden]="SECCION_NUMERO.valid || SECCION_NUMERO.pristine" class="alert alert-danger">
+                EL número de la sección es obligatorio
+            </div>
+        </div>
+        <div class="form-group">
+            <label *ngIf="formEditarSerieDocumental == true">Nombre de la subsección</label>
+            <input type="text" class="form-control" required [(ngModel)]="serieDocumental.SUBSECCION_VARCHAR" #SUBSECCION_VARCHAR="ngModel" name="SUBSECCION_VARCHAR" id="SUBSECCION_VARCHAR" placeholder="Subsección nombre *">
+            <div [hidden]="SUBSECCION_VARCHAR.valid || SUBSECCION_VARCHAR.pristine" class="alert alert-danger">
+                El nombre de la subsección es obligatorio
+            </div>
+        </div>
+        <div class="form-group">
+            <label *ngIf="formEditarSerieDocumental == true">Número de la subsección</label>
+            <input type="number" class="form-control" required [(ngModel)]="serieDocumental.SUBSECCION_NUMERO" #SUBSECCION_NUMERO="ngModel" name="SUBSECCION_NUMERO" id="SUBSECCION_NUMERO" placeholder="Número de la subsección *">
+            <div [hidden]="SUBSECCION_NUMERO.valid || SUBSECCION_NUMERO.pristine" class="alert alert-danger">
+                El número de la subsección es obligatorio
+            </div>
+        </div>
+        <div class="form-group">
+            <label *ngIf="formEditarSerieDocumental == true">Nombre de la serie documental</label>
+            <input type="text" class="form-control" required [(ngModel)]="serieDocumental.SERIE_DOCUMENTAL_VARCHAR" #SERIE_DOCUMENTAL_VARCHAR="ngModel" name="SERIE_DOCUMENTAL_VARCHAR" id="SERIE_DOCUMENTAL_VARCHAR" placeholder="Nombre de la Serie Documental *">
+            <div [hidden]="SERIE_DOCUMENTAL_VARCHAR.valid || SERIE_DOCUMENTAL_VARCHAR.pristine" class="alert alert-danger">
+                El nombre de la serie documental es obligatorio
+            </div>
+        </div>
+        <div class="form-group">
+            <label *ngIf="formEditarSerieDocumental == true">Número de la serie documental</label>
+            <input type="number" class="form-control" required [(ngModel)]="serieDocumental.SERIE_DOCUMENTAL_NUMERO" #SERIE_DOCUMENTAL_NUMERO="ngModel" name="SERIE_DOCUMENTAL_NUMERO" id="SERIE_DOCUMENTAL_NUMERO" placeholder="Número de la serie documental *">
+            <div [hidden]="SERIE_DOCUMENTAL_NUMERO.valid || SERIE_DOCUMENTAL_NUMERO.pristine" class="alert alert-danger">
+                El número de la serie documental es obligatorio
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">{{ tipoFormulario }}</button>
+        <button class="btn btn-light" (click)="cerrarForm()">Cerrar</button>
+    </form>
+</div>

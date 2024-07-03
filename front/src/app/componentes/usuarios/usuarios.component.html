@@ -1,0 +1,53 @@
+<button class="btn btn-light" id="volver" routerLink="/main">← Volver a la página principal</button>
+<div class="container">
+    <table class="table table-striped" border="1">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">usuario</th>
+                <th scope="col">password</th>
+                <th scope="col">tipo de usuario</th>
+                <th scope="col">borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of listaUsuarios">
+                <th><button type="button" class="btn btn-link" style="text-transform: capitalize;" (click)="editarUser(user.id)">{{user.user}}</button></th>
+                <th>****</th>
+                <th *ngIf="user.tipo == 1">Administrador</th>
+                <th *ngIf="user.tipo == 2">Normal</th>
+                <th *ngIf="user.tipo == 3">Inserción</th>
+                <th><button class="btn btn-outline-danger" (click)="borrarUsuario(user)">Borrar</button></th>
+            </tr>   
+        </tbody>
+    </table>
+    <button class="btn btn-link" routerLink="/registrarse">Registro</button>
+</div>
+<div class="container" [hidden]="!banderaFormulario">
+    <form class="form-horizontal" #editarUsuarioForm="ngForm" (ngSubmit)="editarUsuario(editarUsuarioForm.value)">
+        <div class="form-group">
+            <label for="user" class="form-label">Usuario</label>
+            <input type="text" style="text-transform: capitalize;" class="form-control" required [(ngModel)]="usuario.user" name="user" #user="ngModel">
+            <div [hidden]="user.valid || user.pristine" class="alert alert-danger">
+                El user es obligatorio.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="text" class="form-control" required [(ngModel)]="usuario.password" name="password" #password="ngModel">
+            <div class="alert alert-warning alert-dismissible fade show" style="margin-top: 2%;" role="alert">
+                <strong>¡Atención!</strong> Para editar la contraseña, borra el formato actual y pon la que tú quieres, esto es tu antigua contraseña en MD5.
+            </div>
+            <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                La contraseña es obligatoria.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="tipoUser" class="form-label">Tipo de usuario</label><br>
+            <select name="tipoUser" [(ngModel)]="usuario.tipo">
+                <option *ngFor="let tipos of listaTiposUsers" value="{{tipos.id}}">{{tipos.tipo}}</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 2%;" [disabled]="!editarUsuarioForm.valid">Editar</button>
+        <button type="button" class="btn btn-light" style="margin-left: 2%; margin-top: 2%;" (click)="cerrarFormulario()">Cerrar</button>
+    </form>
+</div>

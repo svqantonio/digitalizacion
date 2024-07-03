@@ -1,0 +1,46 @@
+table {
+    text-align: center;
+    margin-top: 10px;
+}
+
+div:not(#fuera) {
+    margin-top: 2%;
+}
+
+input:not(#notThis, #fuera){
+    width: 50%;
+}
+
+.divGrande{
+    border: 5px solid black;
+    text-align: center;
+    height: 100px;
+}
+
+label, select {
+    margin-top: 5px;
+    text-align: center;
+}
+
+#selects{
+    margin-left: 5px;
+    width: 25%;
+}
+
+button:not(#volver, #not, #paginacion){
+    margin-top: 2%;
+    margin-bottom: 5%;
+}
+
+#not{
+    margin-left: 2em;
+}
+
+#cerrar{
+    margin-left: 2%;
+}
+
+
+#paginacion {
+    margin-left: 5px; margin-bottom: 5px;
+}

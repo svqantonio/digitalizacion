@@ -1,0 +1,32 @@
+<button class="btn btn-light" routerLink="/usuarios">← Volver</button>
+<div class="centrar">
+    <div class="alert alert-primary" role="alert">
+        Formulario de registro de usuarios
+    </div>
+    <form  class="form-horizontal" #registerForm="ngForm" (ngSubmit)="submitRegister(registerForm.value)">
+        <div class="mb-3">
+            <input type="text" class="form-control" required [(ngModel)]="usuario.user" name="user" #user="ngModel" id="user" placeholder="Usuario *">
+            <div [hidden]= "user.valid || user.pristine" class="alert alert-danger" id="hidden">
+                El usuario es obligatorio
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" required [(ngModel)]="usuario.password" name="password" #password="ngModel" id="password" placeholder="Password *">
+            <div [hidden]="password.valid || password.pristine" class="alert alert-danger" id="hidden">
+                La contraseña es obligatoria
+            </div>
+        </div>
+        <div class="mb-3">
+            <select name="tipo" id="select" class="form-select" required [(ngModel)]="usuario.tipo">Tipo de Usuario
+                <option disabled selected value="0">Seleccione una opción</option>
+                <option value="1">Administrador</option>
+                <option value="2">Normal</option>
+                <option value="3">Inserción</option>
+            </select>
+        </div>
+        
+        <br>
+        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">Añadir usuario</button>
+        <button class="btn btn-light" style="margin-left: 2%;" routerLink="/usuarios">Volver</button>
+    </form>
+</div>

@@ -1,0 +1,83 @@
+<button class="btn btn-light" id="volver" routerLink="/main">← Volver a la página principal</button>
+<div class="container">
+    <label class="form-label">Formulario de <u>BÚSQUEDA</u>:</label>
+    <div class="d-flex align-items-center">
+        <select name="selectBusqueda" class="form-select" id="selects" [(ngModel)]="busqueda.select" (change)="seleccionarFiltroBusqueda(busqueda.select)">
+            <option selected disabled value="0">Seleccione un criterio de búsqueda</option>
+            <option value="1">Observaciones</option>
+            <option value="2">Fecha</option>
+            <option value="3">Número de expediente</option>
+            <option value="4">Serie Documental</option>
+            <option value="5">Unidad Documental</option>
+        </select>
+        <input type="text" *ngIf="inputObservaciones" id="not" class="form-control" [(ngModel)]="busqueda.observaciones" placeholder="Si no introduces nada, buscarás documentos sin título.">
+        <input type="Date" *ngIf="inputFecha" id="not" class="form-control" [(ngModel)]="busqueda.fecha">
+        <input type="number" *ngIf="inputNumExpediente" id="not" class="form-control" [(ngModel)]="busqueda.numExpediente" placeholder="Introduce un número de expediente.">
+        <select name="SERIE_DOCUMENTAL" *ngIf="inputSerieDoc" id="selects" class="form-select" [(ngModel)]="busqueda.serieDocumental">
+            <option value="0" disabled>Seleccione una opción</option>
+            <option *ngFor="let serieDoc of lista_seriesDocumentales" value="{{serieDoc.ID_SERIE}}">{{ serieDoc.SECCION_NUMERO }}.{{serieDoc.SUBSECCION_NUMERO}}.{{serieDoc.SERIE_DOCUMENTAL_NUMERO}} {{serieDoc.SERIE_DOCUMENTAL_VARCHAR}}</option>
+        </select>
+        <select name="TIPO_CONTENEDOR" *ngIf="inputTipoContenedor" id="selects" class="form-select" [(ngModel)]="busqueda.tipoContenedor" (change)="cambioTipoContenedor(busqueda.tipoContenedor)">
+            <option value="0" disabled>Seleccione una opción</option>
+            <option *ngFor="let tpContenedor of lista_tiposContenedores" value="{{tpContenedor.ID_TIPO_CONTENEDOR}}">{{tpContenedor.VARCHAR_TIPO_CONTENEDOR}}</option>
+        </select>
+        <select name="NUMERO_CONTENEDOR" *ngIf="inputNumeroContenedor == true" id="selects" class="form-select" [(ngModel)]="busqueda.numeroContenedor">
+            <option value="0" disabled>Seleccione una opción</option>
+            <option *ngFor="let numeroCont of lista_numeroContenedores" value="{{numeroCont.NUMERO}}">{{numeroCont.NUMERO}}</option>
+        </select>
+        <button type="submit" *ngIf="inputSelect" id="not" class="btn btn-success" (click)="buscar()">Buscar</button>
+    </div>
+</div>
+<div class="container">
+    <table class="table table-success table-hover" border="1">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="col" [hidden]="condicionUser != 'Administrador'">Id</th>
+                <th scope="col">Observaciones</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Número de expediente</th>
+                <th scope="col">Serie documental</th>
+                <th scope="col">Unidad documental</th>
+                <th scope="col">Ruta</th>
+                <th scope="col" *ngIf="condicionUser != 'Normal'">Editar</th>
+                <th scope="col" *ngIf="condicionUser == 'Administrador'">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let doc of listaDocumentos">
+                <th [hidden]="condicionUser != 'Administrador'">{{ doc.ID_DOCUMENTO }}</th>
+                <th style="text-transform: capitalize;">{{ doc.TITULO}}</th>
+                <th>{{ doc.FECHA | date: 'dd/MM/yyyy' }}</th>
+                <th>{{ doc.NUM_EXPEDIENTE }}</th>
+                <th>{{ doc.SERIE_DOCUMENTAL }}</th>
+                <th>{{ doc.CONTENEDOR }}: {{doc.NUMERO}}</th>
+                <th *ngIf="doc.RUTA != null"><a href="{{doc.RUTA}}" target="_blank">Ver Doc</a></th>
+                <th *ngIf="doc.RUTA == null">Sin doc</th>
+                <th><button class="btn btn-link" routerLink="/documento/{{doc.ID_DOCUMENTO}}" *ngIf="condicionUser != 'Normal'">Editar Doc</button></th>
+                <th *ngIf="condicionUser == 'Administrador'"><button class="btn btn-outline-danger" (click)="borrarDoc(doc)">Borrar Doc</button></th>
+            </tr>   
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <button class="btn btn-outline-primary" id="paginacion" (click)="primeraPagina()" [disabled]="isDisabledPrimeraPag"><<</button>
+    <button class="btn btn-outline-primary" id="paginacion" (click)="controlAnt()" [disabled]="isDisabledAnt"><</button>
+    
+    <button class="btn btn-outline-primary" id="paginacion" (click)="botonesIntermedios(0)" *ngIf="primeroOculto == true">1</button>
+    <button class="btn btn-primary" id="paginacion" *ngIf="primeroOculto == false">1</button>
+
+    <button class="btn btn-outline-primary" id="paginacion" (click)="botonesIntermedios(1)" *ngIf="segundoOculto == true">2</button>
+    <button class="btn btn-primary" id="paginacion" *ngIf="segundoOculto == false">2</button>
+
+    <button class="btn btn-outline-primary" id="paginacion" (click)="botonesIntermedios(2)" *ngIf="terceroOculto == true">3</button>
+    <button class="btn btn-primary" id="paginacion" *ngIf="terceroOculto == false">3</button>
+
+    <label *ngIf="auxiliarOculto == false"><u style="color: white;">.</u>-></label>
+    <button class="btn btn-primary" id="paginacion" [(ngModel)]="pagina" *ngIf="auxiliarOculto == false">{{pagina + 1}}</button>
+
+    <button class="btn btn-outline-primary" id="paginacion" (click)="controlSig()" [disabled]="isDisabledSig">></button>
+    <button class="btn btn-outline-primary" id="paginacion" (click)="ultimaPagina()" [disabled]="isDisabledUltimaPag">>></button>
+    <br>
+    <label>Mostrando página {{pagina + 1}}</label>
+</div>

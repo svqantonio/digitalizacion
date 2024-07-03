@@ -1,0 +1,12 @@
+input, select, label, .contenedor{
+    margin-bottom: 2%;
+}
+
+.contenedor {
+    border: 1px solid black;
+}
+
+.centrarPadre {
+    display: flex;
+    justify-content: center;
+}

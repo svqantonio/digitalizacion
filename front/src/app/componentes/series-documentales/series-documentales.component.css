@@ -1,0 +1,13 @@
+div{
+    margin-top: 2%;
+}
+
+button:not(#notThis){
+    margin-top: 2%;
+    margin-right: 2%;
+}
+
+table{
+    text-transform: capitalize;
+    text-align: center;
+}

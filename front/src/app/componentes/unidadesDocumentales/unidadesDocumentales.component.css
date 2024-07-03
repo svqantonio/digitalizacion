@@ -1,0 +1,32 @@
+div {
+    margin-top: 1em;
+}
+
+table{
+    text-transform: capitalize;
+    text-align: center;
+}
+
+input {
+    width: 50%;
+}
+
+select {
+    width: 25%;
+}
+
+#controladoresFormulario {
+    margin-top: 1%;
+}
+
+#busqueda {
+    margin-bottom: 1%;
+}
+
+#buttonBuscar {
+    margin-left: 1%;
+}
+
+#buttonCerrar{
+    margin-left: 1%;
+}

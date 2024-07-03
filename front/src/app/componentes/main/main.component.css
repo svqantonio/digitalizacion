@@ -1,0 +1,31 @@
+.logout{
+    background-color: red;
+    border-color: red;
+    color: white;
+    border-radius: 2em;
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.171);
+}
+
+.logout:hover{
+    background-color: rgba(255, 0, 0, 0.507);
+    border-color: rgba(255, 0, 0, 0.507);
+    border-radius: 2em;
+    color: white;
+}
+
+.centrar{
+    width: 100%;
+    text-align: center;
+    margin-top: 15vw;
+    display:block;
+}
+
+#this{
+    width: 100%;
+    text-align: right;
+    display:block;
+}
+
+#btnsEnlaces {
+    font-size: 25px;
+}

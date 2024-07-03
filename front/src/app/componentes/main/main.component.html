@@ -1,0 +1,9 @@
+<div class="centrar">
+  <button class="btn btn-link" id="btnsEnlaces" routerLink="/list">Listado de Documentos</button>
+  <button class="btn btn-link" id="btnsEnlaces" [hidden]="condicionUser == 'Normal'" routerLink="/insertar">Insertar Documentos</button>
+  <button class="btn btn-link" id="btnsEnlaces" *ngIf="condicionUser != 'Normal'" routerLink="/contenedores">Unidades Documentales</button>
+  <button class="btn btn-link" id="btnsEnlaces" [hidden]="condicionUser == 'Normal'" routerLink="/seriesDocumentales">Series Documentales</button>
+  <button class="btn btn-link" id="btnsEnlaces" *ngIf="condicionUser == 'Administrador'" routerLink="/usuarios">Usuarios</button>
+  <br>
+  <button class="logout" (click)="logout()">Cerrar sesión</button>
+</div>

@@ -1,0 +1,47 @@
+<button class="btn btn-light" (click)="volver()">← Volver a la lista general</button>
+<div class="centrarPadre">
+    <form class="form-horizontal" #editarUsuarioForm="ngForm" (ngSubmit)="editarUsuario(editarUsuarioForm.value)">
+        <label>Formulario de edición del Documento Nº{{documento.ID_DOCUMENTO}}, {{documento.VARCHAR_TIPO_CONTENEDOR}} {{documento.NUMERO}}. ({{documento.FECHA}})</label>
+        <div class="contenedor">
+            <label><u>Serie Documental</u></label>
+            <select name="SERIE_DOCUMENTAL" for="SERIE_DOCUMENTAL" required [(ngModel)]="documento.ID_SERIE" class="form-select">
+                <option disabled value="0">Seleccione una opción</option>
+                <option *ngFor="let serieDoc of lista_seriesDocumentales" value="{{serieDoc.ID_SERIE}}">{{serieDoc.SECCION_NUMERO}}.{{serieDoc.SUBSECCION_NUMERO}}.{{serieDoc.SERIE_DOCUMENTAL_NUMERO}} {{serieDoc.SERIE_DOCUMENTAL_VARCHAR}}</option>
+            </select>
+        </div>
+        <div class="contenedor">
+            <label><u>Tipo de Unidad Documental</u></label>
+            <select name="TIPO_CONTENEDOR" for="TIPO_CONTENEDOR" required [(ngModel)]="documento.CONTENEDOR" class="form-select" (change)="cambioTipoContenedor(documento.CONTENEDOR)">
+                <option disabled value="0">Seleccione una opción</option>
+                <option *ngFor="let tipoContenedor of lista_tiposContenedores" value="{{tipoContenedor.ID_TIPO_CONTENEDOR}}">{{tipoContenedor.VARCHAR_TIPO_CONTENEDOR}}</option>
+            </select>
+            <label><u>Número</u></label>
+            <select name="NUMERO" for="NUMERO" required [(ngModel)]="documento.NUMERO" class="form-select">
+                <option disabled value="0">Seleccione una opción</option>
+                <option *ngFor="let numero of lista_numerosContenedores" value="{{numero.NUMERO}}">{{numero.NUMERO}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="TITULO" class="form-label">Observaciones</label>
+            <input type="text" style="text-transform: capitalize;" class="form-control" [(ngModel)]="documento.TITULO" name="TITULO" #TITULO="ngModel" placeholder="Observaciones">
+            <div class="alert alert-info">
+                Las observaciones son <u>recomendables</u>, pero <strong>no obligatorias</strong>.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="FECHA" class="form-label">Fecha</label>
+            <input type="Date" class="form-control" required [(ngModel)]="documento.FECHA" name="FECHA" #FECHA="ngModel">
+            <div class="alert alert-info">
+                La fecha es obligatoria.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="NUM_EXPEDIENTE" class="form-label">Número de expediente</label>
+            <input type="number" class="form-control" [(ngModel)]="documento.NUM_EXPEDIENTE" name="NUM_EXPEDIENTE" #NUM_EXPEDIENTE="ngModel">
+            <div class="alert alert-info">
+                El número de expediente es <u>recomendable</u>, pero <strong>no obligatorio</strong>.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!editarUsuarioForm.valid">Editar</button>
+    </form>
+</div>

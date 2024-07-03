@@ -1,0 +1,118 @@
+<button class="btn btn-light" routerLink="/main">← Volver a la página principal</button>
+<div class="container">
+    <label class="form-label">Formulario de <u>BÚSQUEDA</u>:</label>
+    <div class="d-flex align-items-center" id="busqueda">
+        <select class="form-select" [(ngModel)]="busqueda.select" (change)="filtroBusquedaSeleccionado(busqueda.select)">
+            <option value="0" disabled>Seleccione una opción</option>
+            <option value="1">Tipo de contenedor</option>
+            <option value="2">Año</option>
+            <option value="3">Localización</option>
+        </select>
+        <select class="form-select" [hidden]="!inputTipoContenedor" [(ngModel)]="busqueda.tipo_contenedor" (change)="tipoContenedorSeleccionado(busqueda.tipo_contenedor)">
+            <option value="0" disabled>Seleccione una opción</option>
+            <option value="1">Legajo</option>
+            <option value="2">Libro</option>
+        </select>
+        <select class="form-select" [hidden]="!inputNumeroContenedor" [(ngModel)]="busqueda.numero_contenedor">
+            <option value="0" disabled>Seleccione una opción</option>
+            <option *ngFor="let contenedor of lista_contenedores_busqueda" value="{{contenedor.NUMERO}}">{{contenedor.NUMERO}}</option>
+        </select>
+        <input type="text" style="width: 10%; margin-left: 2%;" class="form-control" onkeypress="return /[0-9]/i.test(event.key)" [hidden]="!inputYear" [(ngModel)]="busqueda.year">
+        <input type="text" class="form-control" [hidden]="!inputLocalizacion" [(ngModel)]="busqueda.localizacion" placeholder="Introduzca una localización">
+        <button class="btn btn-primary" id="buttonBuscar" (click)="buscar()">Buscar</button>
+        <button class="btn btn-success" id="buttonCerrar" [hidden]="!buttonCerrarBusqueda" (click)="cerrarFormBusqueda()">Cerrar búsqueda</button>
+    </div>
+    <table class="table table-success table-hover" border="1">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="col">Unidad documental</th>
+                <th scope="col">Fecha de inicio</th>
+                <th scope="col">Fecha de fin</th>
+                <th scope="col">Localizacion</th>
+                <th scope="col" *ngIf="condicionUser != 'Normal'">Editar</th>
+                <th scope="col" *ngIf="condicionUser == 'Administrador'">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cont of lista_contenedores">
+                <th *ngIf="condicionUser != 'Normal'"><button class="btn btn-link" routerLink="/documentosAsociados/{{cont.ID_CONTENEDOR}}">{{ cont.TIPO_CONTENEDOR }} {{ cont.NUMERO }}</button></th>
+                <th>{{ cont.FECHA_INICIO }}</th>
+                <th>{{ cont.FECHA_FIN }}</th>
+                <th>{{ cont.LOCALIZACION }}</th>
+                <th *ngIf="condicionUser != 'Normal'"><button class="btn btn-outline-success" (click)="btnNuevoEditar_segunValor(cont.ID_CONTENEDOR)">Editar</button></th>
+                <th *ngIf="condicionUser == 'Administrador'"><button class="btn btn-outline-danger" (click)="borrarContenedor(cont)">Borrar</button></th>
+            </tr>   
+        </tbody>
+    </table>
+    <div class="alert alert-info" role="alert">
+        Pulsa en la unidad documental para ver sus <u>documentos asociados</u>
+    </div>
+</div>
+<div class="container">
+    <button class="btn btn-link" (click)="btnNuevoEditar_segunValor(0)">Añadir nuevo contenedor</button>
+    <form class="form-horizontal" #nuevoContenedorForm="ngForm" *ngIf="formulario == true" (ngSubmit)="submitNuevoContenedor(nuevoContenedorForm.value)">
+        <div class="form-group">
+            <label class="form-label">Tipo de contenedor</label><br>
+            <select name="TIPO_CONTENEDOR" [(ngModel)]="contenedor.TIPO_CONTENEDOR">
+                <option disabled selected value="0">Seleccione una opción</option>
+                <option *ngFor="let tipoCont of lista_tiposContenedores" value="{{tipoCont.ID_TIPO_CONTENEDOR}}">{{tipoCont.VARCHAR_TIPO_CONTENEDOR}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Número de contenedor</label><br>
+            <input type="number" name="NUMERO" required [(ngModel)]="contenedor.NUMERO" #NUMERO="ngModel" id="NUMERO" placeholder="Número de contenedor">
+            <div [hidden]="NUMERO.valid || NUMERO.pristine" class="alert alert-danger">
+                El número de contenedor es obligatorio.
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Año de inicio</label><br>
+            <input type="number" name="FECHA_INICIO" required [(ngModel)]="contenedor.FECHA_INICIO" #FECHA_INICIO="ngModel" id="FECHA_INICIO" placeholder="Año de inicio">
+            <div [hidden]="FECHA_INICIO.valid || FECHA_INICIO.pristine" class="alert alert-danger">
+                El año de inicio es obligatorio.
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Año de fin</label><br>
+            <input type="number" name="FECHA_FIN" required [(ngModel)]="contenedor.FECHA_FIN" #FECHA_FIN="ngModel" id="FECHA_FIN" placeholder="Año de fin">
+            <div [hidden]="FECHA_FIN.valid || FECHA_FIN.pristine" class="alert alert-danger">
+                El año de fin es obligatorio.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="LOCALIZACION">Localización</label><br>
+            <input type="text" name="LOCALIZACION" required [(ngModel)]="contenedor.LOCALIZACION" #LOCALIZACION="ngModel" id="LOCALIZACION" placeholder="Localización">
+            <div [hidden]="LOCALIZACION.valid || LOCALIZACION.pristine" class="alert alert-danger">
+                La localización es obligatoria.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="controladoresFormulario" [disabled]="!nuevoContenedorForm.valid">{{ funcion }}</button>
+        <button type="button" class="btn btn-secondary" id="controladoresFormulario" style="margin-left: 1%;" (click)="formulario = false">Cerrar</button>
+    </form>
+    <label [hidden]="!tabla_todosLosDocs">Mostrando documentos pertenecientes al <u *ngIf="contenedor.TIPO_CONTENEDOR == 1">Legajo {{contenedor.NUMERO}}</u><u *ngIf="contenedor.TIPO_CONTENEDOR == 2">Libro {{contenedor.NUMERO}}</u></label>
+    <table class="table table-success table-hover" border="1" [hidden]="!tabla_todosLosDocs">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="col">Observaciones</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Número de expediente</th>
+                <th scope="col">Serie documental</th>
+                <th scope="col">Unidad documental</th>
+                <th scope="col">Ruta</th>
+                <th scope="col" *ngIf="condicionUser == 'Administrador'">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let doc of lista_todosLosDocumentos">
+                <th style="text-transform: capitalize;">{{ doc.TITULO}}</th>
+                <th>{{ doc.FECHA | date: 'dd/MM/yyyy' }}</th>
+                <th>{{ doc.NUM_EXPEDIENTE }}</th>
+                <th>{{ doc.SERIE_DOCUMENTAL }}</th>
+                <th>{{ doc.CONTENEDOR }}: {{doc.NUMERO}}</th>
+                <th *ngIf="doc.RUTA != null"><a href="{{doc.RUTA}}" target="_blank">Ver Doc</a></th>
+                <th *ngIf="doc.RUTA == null">Sin doc</th>
+                <th *ngIf="condicionUser == 'Administrador'"><button class="btn btn-outline-danger" (click)="borrarDoc(doc)">Borrar Doc</button></th>
+            </tr>   
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,47 @@
+<button class="btn btn-light" id="volver" (click)="volver()">← Volver a la página principal</button>
+<div class="container">
+    <form class="form-horizontal" #selectPruebaForm="ngForm" (ngSubmit)="onSubmitPrueba(selectPruebaForm.value)">
+        <div class="divGrande">
+            <label for="SERIE_DOCUMENTAL" class="form-label">SERIE DOCUMENTAL</label><br>
+            <select name="SERIE_DOCUMENTAL" [(ngModel)]="serieDocumental" style="width: 25%;"> <!-- [ngModel] -->
+                <option disabled selected value="0">Seleccione una serie documental</option>
+                <option *ngFor="let serie of lista_seriesDocumentales" value="{{ serie.ID_SERIE }}">{{ serie.SECCION_NUMERO }}.{{ serie.SUBSECCION_NUMERO }}.{{ serie.SERIE_DOCUMENTAL_NUMERO }}. {{ serie.SERIE_DOCUMENTAL_VARCHAR }}</option>
+            </select>
+        </div>
+        <div class="divGrande">
+            <label for="TIPO_CONTENEDOR" class="form-label">UNIDAD DOCUMENTAL</label><br>
+            <select name="TIPO_CONTENEDOR" [(ngModel)]="contenedor.tipo" (change)="cambioTipoContenedor(contenedor.tipo)" style="width: 25%;">
+                <option disabled selected value="0">Seleccione un tipo de unidad documental</option>
+                <option *ngFor="let tipoContenedor of lista_tipoContenedores" value="{{ tipoContenedor.ID_TIPO_CONTENEDOR }}">{{ tipoContenedor.VARCHAR_TIPO_CONTENEDOR }}</option>
+            </select>
+            <select name="NUMERO_CONTENEDOR" [(ngModel)]="numeroContenedor" *ngIf="tipoContenedor_seleccionado" style="width: 25%;">
+                <option disabled selected value="0">Seleccione una opción</option>
+                <option *ngFor="let lista of lista_numerosContenedores" value="{{ lista.NUMERO }}">{{ lista.NUMERO }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Observaciones</label>
+            <input type="text" class="form-control" [(ngModel)]="documento.TITULO" name="TITULO" #titulo="ngModel" id="titulo" placeholder="Observaciones" aria-describedby="tituloAyuda">
+            <div class="alert alert-warning alert-dismissible fade show" style="width: 50%;" role="alert">
+                <strong>¡Atención!</strong> Las observaciones NO son <u>obligatorias</u>, pero SI son <u>recomendables.</u>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="FECHA">Fecha</label>
+            <input type="date" name="FECHA" class="form-control" required [(ngModel)]="documento.FECHA" #fecha="ngModel" id="fecha" aria-describedby="fechaAyuda">
+            <div [hidden]="fecha.valid || fecha.pristine" class="alert alert-danger">
+                La fecha es obligatoria
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" name="NUM_EXPEDIENTE">Número de expediente</label>
+            <input type="text" name="NUM_EXPEDIENTE" class="form-control" onkeypress="return /[0-9\/\-\.\_]/i.test(event.key)" [(ngModel)]="documento.NUM_EXPEDIENTE" #numero_expediente="ngModel" id="numero_expediente" placeholder="Número de expediente" aria-describedby="numero_expedienteAyuda">
+            <div class="alert alert-warning alert-dismissible fade show" style="width: 50%;" role="alert">
+                <strong>¡Atención!</strong> El número de expediente NO es <u>obligatorio</u>, pero SI es <u>recomendable.</u>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-outline-success">Enviar datos</button>
+        </div>
+    </form>
+</div>
